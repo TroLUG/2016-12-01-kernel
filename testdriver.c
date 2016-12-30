@@ -9,6 +9,7 @@
 
 static dev_t mydev;
 static char output[] = "Hallo Trolug";
+static char *devicename = "testdriver";
 struct cdev my_cdev;
 static int opened = 0;
 
@@ -45,8 +46,8 @@ struct file_operations my_fops = {
 static char buffer[64];
 static int __init foo(void)
 {
-	printk(KERN_INFO "testdriver wurde geladen");
-	alloc_chrdev_region(&mydev,0,1,"testdriver");
+	printk(KERN_INFO "%s wurde geladen",devicename);
+	alloc_chrdev_region(&mydev,0,1,devicename);
 	printk(KERN_INFO "%s\n", format_dev_t(buffer,mydev));
 	cdev_init(&my_cdev, &my_fops);
 	my_cdev.owner = THIS_MODULE;
@@ -59,5 +60,6 @@ static void __exit bar(void)
 	cdev_del(&my_cdev);
 	unregister_chrdev_region(mydev, 1);
 }
+module_param(devicename,charp,S_IRUGO);
 module_init(foo);
 module_exit(bar);
