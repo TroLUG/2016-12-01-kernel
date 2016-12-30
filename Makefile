@@ -4,3 +4,5 @@ all:
 	make -C $(KERNELDIR) SUBDIRS=$(PWD) modules
 clean:
 	rm -rf *.o *.ko *.mod.* *.symvers *.order
+write: write.c
+	gcc -o write write.c
